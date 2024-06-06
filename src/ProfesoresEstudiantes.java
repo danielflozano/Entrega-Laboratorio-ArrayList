@@ -13,33 +13,84 @@ public class ProfesoresEstudiantes {
 		listaGeneralEstudiantes = new ArrayList<>();
 	}
 	
-	public void iniciar() {
-		construirMenuOpciones();
-		registrarProfesores();
-		registrarEstudiantes();
-		consultarListaProfesoresYEstudiantes();
-		consultarProfesorPorNombre();
-		consultarCantidadEstudiantesPorProfesor();
-		consultarEstudiantes();
-	}
-	
-	private void construirMenuOpciones() {
+	public void construirMenuOpciones() {
 		String nombreUsuario = JOptionPane.showInputDialog("Ingrese su nombre");
+		int codigoMenu = 0;
 		
-		String menu = "MENU PRINCIPAL\n\n"
-				+ "1. Registrar profesores\n"
-				+ "2. Registrar estudiantes asociados al profesor\n"
-				+ "3. Consultar lista total de profesores y sus estudiantes asociados\n"
-				+ "4. Consultar un profesor e imprimir la lista de estudiantes asociados\n"
-				+ "5. Consultar un profesor e indicar la cantidad de estudiantes asociados\n"
-				+ "6. Consultar un estudiante e indicar cual es su director de grupo\n"
-				+ "7. Salir\n\n"
-				+ "Seleccione una opción\n";
-		int codigoMenu = Integer.parseInt(JOptionPane.showInputDialog(menu));
-		
-		System.out.println("Señor/a: " + nombreUsuario + " usted ha seleccionado la opción " + codigoMenu);
+		do {
+			String menu = "*************************MENU PRINCIPAL*************************\n\n"
+					+ "Bienvenido " + nombreUsuario + "\n"
+					+ "Por favor elija una de las siguientes opciones:\n\n"
+					+ "1. Registrar profesores\n"
+					+ "2. Registrar estudiantes asociados al profesor\n"
+					+ "3. Consultar lista total de profesores y sus estudiantes asociados\n"
+					+ "4. Consultar un profesor e imprimir la lista de estudiantes asociados\n"
+					+ "5. Consultar un profesor e indicar la cantidad de estudiantes asociados\n"
+					+ "6. Consultar un estudiante e indicar cual es su director de grupo\n"
+					+ "7. Salir\n\n"
+					+ "Seleccione una opción\n";
+			codigoMenu = Integer.parseInt(JOptionPane.showInputDialog(menu));
+					
+			switch (codigoMenu) {
+			case 1:
+				registrarProfesores();
+				break;
+			case 2:
+				if (listaProfesores.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No puedes seleccionar esta opcion"
+							+ " sin haber registrado por lo menos algún profesor");
+					break;
+				} else {
+					registrarEstudiantes();
+					break;
+				}				
+			case 3:
+				if (listaProfesores.isEmpty() || listaGeneralEstudiantes.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No puedes seleccionar esta opcion"
+							+ " sin haber registrado por lo menos algún profesor y sus estudiante");
+					break;
+				} else {
+					consultarListaProfesoresYEstudiantes();
+					break;
+				}
+			case 4:
+				if (listaProfesores.isEmpty() || listaGeneralEstudiantes.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No puedes seleccionar esta opcion"
+							+ " sin haber registrado por lo menos algún profesor y sus estudiante");
+					break;
+				} else {
+					consultarProfesorPorNombre();
+					break;
+				}
+			case 5:
+				if (listaProfesores.isEmpty() || listaGeneralEstudiantes.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No puedes seleccionar esta opcion"
+							+ " sin haber registrado por lo menos algún profesor y sus estudiante");
+					break;
+				} else {
+					consultarCantidadEstudiantesPorProfesor();
+					break;
+				}
+			case 6:
+				if (listaGeneralEstudiantes.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No puedes seleccionar esta opcion"
+							+ " sin haber registrado por lo menos algún estudiante");
+					break;
+				} else {
+					consultarEstudiantes();
+					break;
+				}
+			case 7:
+				JOptionPane.showMessageDialog(null, nombreUsuario + " gracias por utilizar nuestros servicios, hasta pronto");
+				break;
+			default:
+				JOptionPane.showMessageDialog(null, "No corresponde a un codigo valido",
+						"ADVERTENCIA", JOptionPane.WARNING_MESSAGE);
+				break;
+			}
+		} while (codigoMenu != 7);
 	}
-		
+				
 	private void registrarProfesores() {
 		System.out.println("\n**** Registro de Profesores ****");
 		int cant = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de profesores"));
@@ -96,7 +147,7 @@ public class ProfesoresEstudiantes {
 			for (int j = 0; j < listaTemporal.size(); j++) {
 				System.out.print(listaTemporal.get(j));
 				if (j < listaTemporal.size()-1) {
-					System.out.print(",");
+					System.out.print(", ");
 				}
 			}
 			
@@ -117,30 +168,30 @@ public class ProfesoresEstudiantes {
 			for (int i = 0; i < listaEstudiantesTemporal.size(); i++) {
 				System.out.print(listaEstudiantesTemporal.get(i));
 				if (i < listaEstudiantesTemporal.size()-1) {
-					System.out.print(",");
+					System.out.print(", ");
 				}
 			}
 			
 			System.out.print("]\n");
 			
 		} else {
-			System.out.println("No se encuentra el Profesor " + nombre + "\n");
+			System.out.println("No se encuentra el profesor " + nombre + "\n");
 		}
 	}
 	
 	private void consultarCantidadEstudiantesPorProfesor() {
-		System.out.println("\n**** Consulta Cantidad de Estudiantes de Profesores ****\n");
+		System.out.println("\n**** Consulta Cantidad de Estudiantes por Profesor ****\n");
 		String nombre = JOptionPane.showInputDialog("Ingrese el nombre del profesor para saber "
 				+ "la cantidad de estudiantes asociados");
 		
 		if (listaProfesores.contains(nombre)) {
 			int posicion = listaProfesores.indexOf(nombre);
 			ArrayList<String> listaEstudiantesTemporal = listaGeneralEstudiantes.get(posicion);
-			System.out.println("La cantidad de estudiantes asociados al Profesor " + nombre +
+			System.out.println("La cantidad de estudiantes asociados al profesor " + nombre +
 					" es " + listaEstudiantesTemporal.size());
 			
 		} else {
-			System.out.println("No se Encuentra el Profesor " + nombre + "\n");
+			System.out.println("No se encuentra el profesor " + nombre + "\n");
 		}
 	}
 	
@@ -156,12 +207,12 @@ public class ProfesoresEstudiantes {
 			if (listaTemporal.contains(nombre)) {
 				for (int j = 0; j < listaTemporal.size(); j++) {
 					if (listaTemporal.get(j).equalsIgnoreCase(nombre)) {
-						System.out.println("Encuentra al Nombre: " + nombre + " pertenece al grupo de "
-								+ listaProfesores.get(i));
+						System.out.println("El estudiante " +nombre + " se encuentra en la base de datos"
+								+ " y pertenece al grupo de " + listaProfesores.get(i));
 					}
 				}
 			} else {
-				System.out.println("No se encuentra el nombre en el Grupo de " + listaProfesores.get(i));
+				System.out.println("No se encuentra el nombre en el grupo de " + listaProfesores.get(i));
 			}
 		}
 	}
